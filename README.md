@@ -1,29 +1,28 @@
-# README #
+# Task Manager
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This is backend for intership project
 
-### What is this repository for? ###
+## Local env requirements
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+- Node.js 16
+- PostgreSQL 14
 
-### How do I get set up? ###
+## Setup local
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+1. Create the database:
 
-### Contribution guidelines ###
+    ```
 
-* Writing tests
-* Code review
-* Other guidelines
+    psql postgres
+    create user intershipuser with password '1234';
+    alter user intershipuser with superuser;
+    create database testdb with owner = intershipuser;
+    grant all privileges on database testdb to intershipuser;
+    alter user intershipuser createdb;
+    exit
 
-### Who do I talk to? ###
+    ```
 
-* Repo owner or admin
-* Other community or team contact
+1. Istall modules `npm install`
+2. Create `.env` file based on `.env.examle`
+3. Run server `npm run start`

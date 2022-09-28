@@ -1,0 +1,182 @@
+import { NextFunction, Response } from 'express';
+import {
+  findProject,
+  findProjects,
+  createProject,
+  deleteProject,
+  updateProject,
+  getProjectsStatistic,
+  checkProject,
+} from '../services/db/projects.services';
+import { customResponse } from '../helpers/responce';
+import logger from '../helpers/logger';
+import {
+  UpdateProjectRequest,
+  SearchProjectRequest,
+} from '../types/requests/projects.request.type';
+import { ParamsIdRequest } from '../types/requests/global.request.type';
+import { Op } from 'sequelize';
+import { checkUser } from '../services/db/users.services';
+
+export const createProjectAction = async (
+  req: any,
+  res: Response,
+  next: NextFunction
+) => {
+  const { title, color } = req.body;
+  const { id } = req.user;
+
+  logger.info(
+    `Create Project Action: { title: ${title}, color: ${color}, userId: ${id} } `
+  );
+
+  try {
+    const project = await createProject({
+      title,
+      color,
+      owner_id: id,
+    });
+
+    return customResponse(res, 200, project);
+  } catch (err) {
+    logger.error('Create Project Action - Cannot create project', err);
+    next(err);
+  }
+};
+
+export const deleteProjectAction = async (
+  req: ParamsIdRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  logger.info(`Delete Project Action: { id: ${id} } `);
+
+  try {
+    const project: any = await findProject({ id });
+
+    if (project.title === 'Personal') {
+      return customResponse(res, 400, {
+        code: 400,
+        message: `You Cannot delete personal project`,
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+
+  try {
+    await deleteProject(id);
+
+    return customResponse(res, 200, { id });
+  } catch (err) {
+    logger.error('Delete Project Action - Cannot delete project', err);
+    next(err);
+  }
+};
+
+export const getProjectAction = async (
+  req: ParamsIdRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  logger.info(`Get Project Action: { id: ${id} } `);
+
+  try {
+    const project = await findProject({ id });
+
+    return customResponse(res, 200, project);
+  } catch (err) {
+    logger.error('Get Project Action - Cannot get project', err);
+    next(err);
+  }
+};
+
+export const getUserProjectsAction = async (
+  req: ParamsIdRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  logger.info(`Get User Projects Action: { id: ${id} } `);
+
+  try {
+    await checkUser(id);
+    const projects = await findProjects({ owner_id: id });
+
+    return customResponse(res, 200, projects);
+  } catch (err) {
+    logger.error('Get User Projects Action - Cannot get projects', err);
+    next(err);
+  }
+};
+
+export const getProjectsStatisticAction = async (
+  req: ParamsIdRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+
+  logger.info(`Get Projects Statistic Action: { id: ${id} } `);
+
+  try {
+    await checkUser(id);
+    const projects = await getProjectsStatistic(id);
+
+    return customResponse(res, 200, projects);
+  } catch (err) {
+    logger.error('Get Projects Statistic Action - Cannot get projects', err);
+    next(err);
+  }
+};
+
+export const updateProjectAction = async (
+  req: UpdateProjectRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { title, color } = req.body;
+  const { id } = req.params;
+
+  logger.info(`Update Project Action: { title: ${title}, color: ${color} } `);
+
+  let project;
+  try {
+    await checkProject(id);
+    project = await updateProject(id, {
+      title,
+      color,
+    });
+
+    return customResponse(res, 200, project);
+  } catch (err) {
+    logger.error('Update Project Action - Cannot update project', err);
+    next(err);
+  }
+};
+
+export const searchProjectAction = async (
+  req: SearchProjectRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { query } = req.query;
+
+  logger.info(`Search Project Action: { query: ${query} } `);
+
+  let project;
+
+  try {
+    project = await findProjects({ title: { [Op.substring]: query } });
+
+    return customResponse(res, 200, project);
+  } catch (err) {
+    logger.error('Search Project Action - Cannot get project', err);
+    next(err);
+  }
+};
