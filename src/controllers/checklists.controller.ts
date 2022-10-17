@@ -5,9 +5,9 @@ import {
   createChecklist,
   deleteChecklist,
   updateChecklist,
+  checkChecklist,
 } from '../services/db/checklists.services';
 import { customResponse } from '../helpers/responce';
-import { UpdateChecklistRequest } from '../types/requests/checklists.request.type';
 import { ParamsIdRequest } from '../types/requests/global.request.type';
 import logger from '../helpers/logger';
 import { checkUser } from '../services/db/users.services';
@@ -52,15 +52,17 @@ export const createChecklistAction = async (
 };
 
 export const deleteChecklistAction = async (
-  req: ParamsIdRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
+  const { id: userId } = req.user;
 
   logger.info(`Delete Checklist Action: { id: ${id} } `);
 
   try {
+    await checkChecklist(id, userId);
     await deleteChecklist(id);
 
     return customResponse(res, 200, { id });
@@ -110,18 +112,20 @@ export const getUserChecklistsAction = async (
 };
 
 export const updateChecklistAction = async (
-  req: UpdateChecklistRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
   const { title, color, items } = req.body;
   const { id } = req.params;
+  const { id: userId } = req.user;
 
   logger.info(
     `Update Checklist Action: { title: ${title}, color: ${color}, id: ${id} } `
   );
 
   try {
+    await checkChecklist(id, userId);
     const checklist = await updateChecklist(id, { title, color }, items);
 
     return customResponse(res, 200, checklist);

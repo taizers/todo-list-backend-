@@ -3,16 +3,26 @@ const { Project } = require('../../db/models/index');
 import {
   ResourceNotFoundError,
   EntityNotFoundError,
+  DontHaveAccessError,
 } from '../../helpers/error';
 import { QueryTypes } from 'sequelize';
 import { sequelize } from '../../db/models';
 
-export const checkProject = async (id: number | string) => {
+export const getAndCheckProject = async (
+  id: number | string,
+  userId?: number | string
+) => {
   const project = await Project.findByPk(id);
 
   if (!project) {
     throw new ResourceNotFoundError('Project');
   }
+
+  if (userId && project.owner_id !== userId) {
+    throw new DontHaveAccessError();
+  }
+
+  return project;
 };
 
 export const findProject = async (where: object) => {

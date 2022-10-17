@@ -3,6 +3,7 @@ const { Task, Taskattachment, User } = require('../../db/models/index');
 import {
   ResourceNotFoundError,
   EntityNotFoundError,
+  DontHaveAccessError,
 } from '../../helpers/error';
 import UserDto from '../../dtos/user.dto';
 import TaskAttachmentDto from '../../dtos/task-attachment.dto';
@@ -45,11 +46,18 @@ const convertUsersAndAttachmentsInTask = (task: TaskFromDBType) => {
   return resultTask;
 };
 
-export const checkTask = async (id: number | string) => {
+export const checkTask = async (
+  id: number | string,
+  userId?: number | string
+) => {
   const task = await Task.findByPk(id);
 
   if (!task) {
     throw new ResourceNotFoundError('Task');
+  }
+
+  if (userId && task.owner_id !== userId && task.assigned_to !== userId) {
+    throw new DontHaveAccessError();
   }
 };
 

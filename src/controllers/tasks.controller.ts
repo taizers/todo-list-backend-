@@ -12,10 +12,9 @@ import {
 import { checkUser } from '../services/db/users.services';
 import { customResponse } from '../helpers/responce';
 import logger from '../helpers/logger';
-import { UpdateTaskRequest } from '../types/requests/tasks.request.type';
 import { ParamsIdRequest } from '../types/requests/global.request.type';
 import { UnProcessableEntityError } from '../helpers/error';
-import { checkProject } from '../services/db/projects.services';
+import { getAndCheckProject } from '../services/db/projects.services';
 
 export const createTaskAction = async (
   req: any,
@@ -46,8 +45,11 @@ export const createTaskAction = async (
   );
 
   try {
-    await checkUser(assigned_to);
-    await checkProject(project_id);
+    if (assigned_to) {
+      await checkUser(assigned_to);
+    }
+
+    await getAndCheckProject(project_id, id);
 
     const task = await createTask(
       {
@@ -70,15 +72,18 @@ export const createTaskAction = async (
 };
 
 export const deleteTaskAction = async (
-  req: ParamsIdRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
+  const { id: userId } = req.user;
 
   logger.info(`Delete Task Action: { id: ${id} } `);
 
   try {
+    await checkTask(id, userId);
+
     await deleteTask(id);
 
     return customResponse(res, 200, { id });
@@ -177,7 +182,6 @@ export const getProjectTasksAction = async (
   logger.info(`Get Project Tasks Action: { id: ${id} } `);
 
   try {
-    await checkProject(id);
     const tasks = await findTasks({ project_id: id });
 
     return customResponse(res, 200, tasks);
@@ -198,12 +202,14 @@ export const uploadTaskAttachmentAction = async (
 
   const { task_id, type } = req.body;
   const { filename } = req.file;
+  const { id } = req.user;
 
   logger.info(
     `Upload Task Attachment Action: { task_id: ${task_id}, type: ${type}, filename: ${filename} } `
   );
 
   try {
+    await checkTask(task_id, id);
     const attachment = await uploadTaskAttachement({
       task_id,
       type,
@@ -218,11 +224,12 @@ export const uploadTaskAttachmentAction = async (
 };
 
 export const updateTaskAction = async (
-  req: UpdateTaskRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
+  const { id: userId } = req.user;
   const {
     title,
     due_date,
@@ -246,13 +253,14 @@ export const updateTaskAction = async (
   );
 
   try {
+    await checkTask(id, userId);
+
     if (assigned_to) {
       await checkUser(assigned_to);
     }
     if (project_id) {
-      await checkProject(project_id);
+      await getAndCheckProject(project_id);
     }
-    await checkTask(id);
 
     const task = await updateTask(id, members, {
       title,

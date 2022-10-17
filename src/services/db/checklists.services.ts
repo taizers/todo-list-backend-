@@ -3,7 +3,23 @@ const { Checklist, Checklistitem } = require('../../db/models/index');
 import {
   ResourceNotFoundError,
   EntityNotFoundError,
+  DontHaveAccessError,
 } from '../../helpers/error';
+
+export const checkChecklist = async (
+  id: number | string,
+  userId?: number | string
+) => {
+  const checklist = await Checklist.findByPk(id);
+
+  if (!checklist) {
+    throw new ResourceNotFoundError('Checklist');
+  }
+
+  if (userId && checklist.owner_id !== userId) {
+    throw new DontHaveAccessError();
+  }
+};
 
 export const findChecklist = async (where: object) => {
   const checklist = await Checklist.findOne({

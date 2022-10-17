@@ -3,14 +3,12 @@ import {
   deleteChecklistItem,
   createChecklistItem,
   deleteChecklistItems,
+  getChecklistId,
 } from '../services/db/checklist-items.services';
 import { customResponse } from '../helpers/responce';
-import {
-  CreateChecklistItemRequest,
-  DeleteChecklistItemsRequest,
-} from '../types/requests/checklist-items.request.type';
-import { ParamsIdRequest } from '../types/requests/global.request.type';
+import { CreateChecklistItemRequest } from '../types/requests/checklist-items.request.type';
 import logger from '../helpers/logger';
+import { checkChecklist } from '../services/db/checklists.services';
 
 export const createChecklistItemAction = async (
   req: CreateChecklistItemRequest,
@@ -41,15 +39,19 @@ export const createChecklistItemAction = async (
 };
 
 export const deleteChecklistItemAction = async (
-  req: ParamsIdRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
+  const { id: userId } = req.user;
 
   logger.info(`Delete Checklist Item Action: { id: ${id} } `);
 
   try {
+    const checklistId = await getChecklistId(id);
+
+    await checkChecklist(checklistId, userId);
     await deleteChecklistItem(id);
 
     return customResponse(res, 200, { id });
@@ -60,17 +62,24 @@ export const deleteChecklistItemAction = async (
 };
 
 export const deleteChecklistItemsAction = async (
-  req: DeleteChecklistItemsRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
   const { items } = req.body;
+  const { id } = req.user;
 
   logger.info(
     `Delete Checklist Item Action: { items.length: ${items.length} } `
   );
 
   try {
+    await Promise.all(
+      items?.map(async (item: number) => {
+        const checklistId = await getChecklistId(item);
+        await checkChecklist(checklistId, id);
+      })
+    );
     await deleteChecklistItems(items);
 
     return customResponse(res, 200, { items });

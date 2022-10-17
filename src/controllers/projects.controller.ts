@@ -6,14 +6,11 @@ import {
   deleteProject,
   updateProject,
   getProjectsStatistic,
-  checkProject,
+  getAndCheckProject,
 } from '../services/db/projects.services';
 import { customResponse } from '../helpers/responce';
 import logger from '../helpers/logger';
-import {
-  UpdateProjectRequest,
-  SearchProjectRequest,
-} from '../types/requests/projects.request.type';
+import { SearchProjectRequest } from '../types/requests/projects.request.type';
 import { ParamsIdRequest } from '../types/requests/global.request.type';
 import { Op } from 'sequelize';
 import { checkUser } from '../services/db/users.services';
@@ -45,21 +42,22 @@ export const createProjectAction = async (
 };
 
 export const deleteProjectAction = async (
-  req: ParamsIdRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
+  const { id: userId } = req.user;
 
   logger.info(`Delete Project Action: { id: ${id} } `);
 
   try {
-    const project: any = await findProject({ id });
+    const project = await getAndCheckProject(id, userId);
 
     if (project.title === 'Personal') {
       return customResponse(res, 400, {
         code: 400,
-        message: `You Cannot delete personal project`,
+        message: 'You Cannot delete personal project',
       });
     }
   } catch (err) {
@@ -136,18 +134,19 @@ export const getProjectsStatisticAction = async (
 };
 
 export const updateProjectAction = async (
-  req: UpdateProjectRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
   const { title, color } = req.body;
   const { id } = req.params;
+  const { id: userId } = req.user;
 
   logger.info(`Update Project Action: { title: ${title}, color: ${color} } `);
 
   let project;
   try {
-    await checkProject(id);
+    await getAndCheckProject(id, userId);
     project = await updateProject(id, {
       title,
       color,

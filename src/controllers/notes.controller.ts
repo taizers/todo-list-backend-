@@ -5,9 +5,9 @@ import {
   createNote,
   deleteNote,
   updateNote,
+  checkNote,
 } from '../services/db/notes.services';
 import { customResponse } from '../helpers/responce';
-import { UpdateNoteRequest } from '../types/requests/notes.request.type';
 import { ParamsIdRequest } from '../types/requests/global.request.type';
 import logger from '../helpers/logger';
 import { checkUser } from '../services/db/users.services';
@@ -39,15 +39,17 @@ export const createNoteAction = async (
 };
 
 export const deleteNoteAction = async (
-  req: ParamsIdRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
+  const { id: userId } = req.user;
 
   logger.info(`Delete Note Action: { id: ${id} } `);
 
   try {
+    await checkNote(id, userId);
     await deleteNote(id);
 
     return customResponse(res, 200, { id });
@@ -98,12 +100,13 @@ export const getUserNotesAction = async (
 };
 
 export const updateNoteAction = async (
-  req: UpdateNoteRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
   const { description, color, is_completed } = req.body;
   const { id } = req.params;
+  const { id: userId } = req.user;
 
   logger.info(
     `Update Note Action: { description: ${description}, color: ${color}, is_completed: ${is_completed} } `
@@ -111,6 +114,7 @@ export const updateNoteAction = async (
 
   let note;
   try {
+    await checkNote(id, userId);
     note = await updateNote(id, {
       description,
       color,

@@ -4,6 +4,7 @@ import {
   createComment,
   deleteComment,
   uploadCommentAttachement,
+  checkComment,
 } from '../services/db/comments.services';
 import { customResponse } from '../helpers/responce';
 import { UnProcessableEntityError } from '../helpers/error';
@@ -43,15 +44,17 @@ export const createCommentAction = async (
 };
 
 export const deleteCommentAction = async (
-  req: ParamsIdRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
+  const { id: userId } = req.user;
 
   logger.info(`Delete Comment Action: { id: ${id} } `);
 
   try {
+    await checkComment(id, userId);
     await deleteComment(id);
 
     return customResponse(res, 200, { id });
@@ -92,12 +95,14 @@ export const uploadCommentAttachmentAction = async (
 
   const { comment_id, type } = req.body;
   const { filename } = req.file;
+  const { id } = req.user;
 
   logger.info(
     `Upload Comment Attachment Action: { comment_id: ${comment_id}, type: ${type}, filename: ${filename} } `
   );
 
   try {
+    await checkComment(comment_id, id);
     const attachment = await uploadCommentAttachement({
       comment_id,
       type,

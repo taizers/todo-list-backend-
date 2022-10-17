@@ -17,6 +17,11 @@ export class ResourceNotFoundError extends ApplicationError {
     this.data = { resource };
   }
 }
+export class DontHaveAccessError extends ApplicationError {
+  constructor() {
+    super('You dont have access', 403);
+  }
+}
 
 export class EntityNotFoundError extends ApplicationError {
   data: object;

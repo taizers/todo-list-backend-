@@ -3,7 +3,23 @@ const { Note } = require('../../db/models/index');
 import {
   ResourceNotFoundError,
   EntityNotFoundError,
+  DontHaveAccessError,
 } from '../../helpers/error';
+
+export const checkNote = async (
+  id: number | string,
+  userId?: number | string
+) => {
+  const note = await Note.findByPk(id);
+
+  if (!note) {
+    throw new ResourceNotFoundError('Note');
+  }
+
+  if (userId && note.owner_id !== userId) {
+    throw new DontHaveAccessError();
+  }
+};
 
 export const findNote = async (where: object) => {
   const note = await Note.findOne({

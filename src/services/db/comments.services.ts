@@ -3,6 +3,7 @@ const { Comment, Commentattachment } = require('../../db/models/index');
 import {
   EntityNotFoundError,
   ResourceNotFoundError,
+  DontHaveAccessError,
 } from '../../helpers/error';
 import {
   CommentAttachmentType,
@@ -10,6 +11,21 @@ import {
 } from '../../types/entities/global.entities.type';
 
 import CommentAttachmentDto from '../../dtos/comment-attachment.dto';
+
+export const checkComment = async (
+  id: number | string,
+  userId?: number | string
+) => {
+  const comment = await Comment.findByPk(id);
+
+  if (!comment) {
+    throw new ResourceNotFoundError('Comment');
+  }
+
+  if (userId && comment.owner_id !== userId) {
+    throw new DontHaveAccessError();
+  }
+};
 
 const convertAttchmentsInComment = (comment: CommentFromDBType) => {
   const dtosAttachments = comment?.attachments?.map(
