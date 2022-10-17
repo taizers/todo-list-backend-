@@ -16,19 +16,17 @@ import {
 import bcrypt from 'bcrypt';
 import { UnAuthorizedError, ApplicationError } from '../../helpers/error';
 
-const getUserSession = async (userDto: UserDto) => {
-  const user_session = generateTokens({ ...userDto });
+const getUserSession = async (id: number) => {
+  const session = generateTokens(id);
 
-  await saveToken(userDto.id, user_session.refresh_token);
+  await saveToken(id, session.refresh_token);
 
-  return user_session;
+  return session;
 };
 
 export const login = async (email: string, password: string) => {
   const user = await User.findOne({
-    where: {
-      email: email,
-    },
+    where: { email },
     row: true,
   });
 
@@ -42,11 +40,9 @@ export const login = async (email: string, password: string) => {
     throw new BadCredentialsError('Bad password');
   }
 
-  const userDto = new UserDto(user);
+  const user_session = await getUserSession(user.id);
 
-  const session = await getUserSession(userDto);
-
-  return { user_id: user.id, ...session };
+  return user_session;
 };
 
 export const createUser = async (payload: object) => {
@@ -58,7 +54,7 @@ export const createUser = async (payload: object) => {
   }
 
   const userDto = new UserDto(user);
-  const user_session = await getUserSession(userDto);
+  const user_session = await getUserSession(user.id);
 
   return { user_session, ...userDto };
 };
@@ -88,9 +84,7 @@ export const refresh = async (refreshToken: string) => {
     throw new UnAuthorizedError();
   }
 
-  const userDto = new UserDto(user);
+  const user_session = await getUserSession(user.id);
 
-  const session = await getUserSession(userDto);
-
-  return { user_id: user.id, ...session };
+  return user_session;
 };
