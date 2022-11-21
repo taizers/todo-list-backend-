@@ -50,7 +50,6 @@ export const createUser = async (payload: object) => {
   try {
     user = await User.create(payload);
   } catch (error) {
-    console.log(error);
     throw new Error('Could not create user');
   }
 

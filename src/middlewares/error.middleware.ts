@@ -19,7 +19,6 @@ export default (
     });
   }
 
-  console.log(error);
   return customResponse(res, error.status, {
     code: error.status,
     message: validationMessage || error.message,
