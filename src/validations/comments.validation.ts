@@ -4,7 +4,7 @@ export const createCommentValidation = validate(
   {
     body: Joi.object({
       content: Joi.string().required().max(1024),
-      task_id: Joi.number().required(),
+      task_id: Joi.string().max(256).required(),
     }),
   },
   {

@@ -6,13 +6,13 @@ module.exports = {
     return queryInterface.createTable('tasks', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.literal('gen_random_uuid()'),
       },
       owner_id: {
         allowNull: false,
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
       },
       project_id: {
         allowNull: false,
@@ -20,12 +20,12 @@ module.exports = {
           model: 'projects',
           key: 'id',
         },
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
       },
       assigned_to: {
         allowNull: true,
         defaultValue: null,
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
       },
       title: {
         allowNull: false,

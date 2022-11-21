@@ -51,7 +51,7 @@ const getQuickNotesValue = async (id: string) => {
   return Math.round((countCompletedNotes / countNotes) * 100);
 };
 
-export const checkUser = async (id: number | string) => {
+export const checkUser = async (id: string) => {
   const user = await User.findByPk(id);
 
   if (!user) {

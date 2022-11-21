@@ -5,7 +5,7 @@ export const createChecklistItemValidation = validate(
     body: Joi.object({
       content: Joi.string().max(512).required(),
       is_completed: Joi.boolean().required(),
-      checklist_id: Joi.number().required(),
+      checklist_id: Joi.string().max(256).required(),
     }),
   },
   {
@@ -19,7 +19,7 @@ export const createChecklistItemValidation = validate(
 export const deleteChecklistItemsValidation = validate(
   {
     body: Joi.object({
-      items: Joi.array().items(Joi.number()).required(),
+      items: Joi.array().items(Joi.string().max(256)).required(),
     }),
   },
   {

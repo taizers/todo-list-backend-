@@ -6,9 +6,9 @@ module.exports = {
     return queryInterface.createTable('comments', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.literal('gen_random_uuid()'),
       },
       content: {
         allowNull: false,
@@ -20,7 +20,7 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
       },
       task_id: {
         allowNull: false,
@@ -28,7 +28,7 @@ module.exports = {
           model: 'tasks',
           key: 'id',
         },
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
       },
       created_at: {
         allowNull: false,

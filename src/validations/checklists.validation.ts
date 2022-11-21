@@ -32,7 +32,7 @@ export const updateChecklistValidation = validate(
       items: Joi.array()
         .items(
           Joi.object({
-            id: Joi.number().allow(null).required(),
+            id: Joi.string().max(256).allow(null).required(),
             content: Joi.string().max(512).required(),
             is_completed: Joi.boolean().required(),
           })

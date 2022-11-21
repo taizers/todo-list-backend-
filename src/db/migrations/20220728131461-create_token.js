@@ -6,9 +6,9 @@ module.exports = {
     return queryInterface.createTable('tokens', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.literal('gen_random_uuid()'),
       },
       refresh_token: {
         type: Sequelize.DataTypes.TEXT,
@@ -20,7 +20,7 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
       },
       created_at: {
         allowNull: false,

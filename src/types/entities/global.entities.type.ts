@@ -1,7 +1,7 @@
 export type CommentAttachmentType = {
-  id: number;
+  id: string;
   type: string;
-  comment_id: number;
+  comment_id: string;
   name: string;
   created_at: Date;
   updated_at: Date;
@@ -9,9 +9,9 @@ export type CommentAttachmentType = {
 };
 
 export type TaskAttachmentType = {
-  id: number;
+  id: string;
   type: string;
-  task_id: number;
+  task_id: string;
   name: string;
   created_at: Date;
   updated_at: Date;
@@ -19,7 +19,7 @@ export type TaskAttachmentType = {
 };
 
 export type UserType = {
-  id: number;
+  id: string;
   email: string;
   username: string;
   avatar: string | null;
@@ -29,13 +29,13 @@ export type UserType = {
 };
 
 export type TaskType = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   due_date: Date;
-  owner_id: number;
-  assigned_to: number | null;
-  project_id: number;
+  owner_id: string;
+  assigned_to: string | null;
+  project_id: string;
   is_completed: boolean;
   members: Array<UserType>;
   attachments: Array<TaskAttachmentType>;
@@ -51,10 +51,10 @@ export type TaskFromDBType = {
 };
 
 export type CommentType = {
-  id: number;
+  id: string;
   content: string;
-  owner_id: number;
-  task_id: number;
+  owner_id: string;
+  task_id: string;
   attachments: Array<CommentAttachmentType>;
   created_at: Date;
   updated_at: Date;
@@ -71,5 +71,5 @@ export type UserSessionType = {
   refresh_token: string;
   expires_in: number;
   token_type: string;
-  user_id: number;
+  user_id: string;
 };

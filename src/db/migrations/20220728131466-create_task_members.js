@@ -10,7 +10,7 @@ module.exports = {
           model: 'tasks',
           key: 'id',
         },
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
       },
       user_id: {
         allowNull: false,
@@ -18,7 +18,7 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
       },
       created_at: {
         allowNull: false,

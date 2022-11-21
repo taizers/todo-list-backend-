@@ -12,7 +12,7 @@ declare global {
 
 declare module "jsonwebtoken" {
     export interface JwtPayload {
-        id: number;
+        id: string;
     }
 }
 

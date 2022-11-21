@@ -13,8 +13,8 @@ import {
 import CommentAttachmentDto from '../../dtos/comment-attachment.dto';
 
 export const checkComment = async (
-  id: number | string,
-  userId?: number | string
+  id: string,
+  userId?: string
 ) => {
   const comment = await Comment.findByPk(id);
 

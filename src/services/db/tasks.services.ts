@@ -47,8 +47,8 @@ const convertUsersAndAttachmentsInTask = (task: TaskFromDBType) => {
 };
 
 export const checkTask = async (
-  id: number | string,
-  userId?: number | string
+  id: string,
+  userId?: string
 ) => {
   const task = await Task.findByPk(id);
 
@@ -89,7 +89,7 @@ export const findTask = async (where: object) => {
 
 export const createTask = async (
   payload: object,
-  members: Array<number> | null
+  members: Array<string> | null
 ) => {
   const transaction = await sequelize.transaction();
   let task;
@@ -193,7 +193,7 @@ export const uploadTaskAttachement = async (payload: object) => {
 
 export const updateTask = async (
   id: string,
-  members: Array<number> | undefined,
+  members: Array<string> | undefined,
   payload: object
 ) => {
   let task;

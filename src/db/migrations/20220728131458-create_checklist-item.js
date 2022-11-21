@@ -6,9 +6,9 @@ module.exports = {
     return queryInterface.createTable('checklistitems', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.literal('gen_random_uuid()'),
       },
       checklist_id: {
         allowNull: false,
@@ -16,7 +16,7 @@ module.exports = {
           model: 'checklists',
           key: 'id',
         },
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
       },
       content: {
         allowNull: false,

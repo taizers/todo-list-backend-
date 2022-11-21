@@ -75,7 +75,7 @@ export const deleteChecklistItemsAction = async (
 
   try {
     await Promise.all(
-      items?.map(async (item: number) => {
+      items?.map(async (item: string) => {
         const checklistId = await getChecklistId(item);
         await checkChecklist(checklistId, id);
       })

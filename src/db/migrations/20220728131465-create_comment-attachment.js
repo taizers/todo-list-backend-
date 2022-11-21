@@ -6,9 +6,9 @@ module.exports = {
     return queryInterface.createTable('commentattachments', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
+        defaultValue: Sequelize.literal('gen_random_uuid()'),
       },
       type: {
         allowNull: false,
@@ -24,7 +24,7 @@ module.exports = {
           model: 'comments',
           key: 'id',
         },
-        type: Sequelize.DataTypes.INTEGER,
+        type: Sequelize.DataTypes.UUID,
       },
       created_at: {
         allowNull: false,

@@ -5,7 +5,7 @@ export interface UpdateChecklistRequest extends Request {
     title?: string;
     color?: string;
     items: Array<{
-      id: number | null;
+      id: string | null;
       content: string;
       is_completed: boolean;
     }> | null;

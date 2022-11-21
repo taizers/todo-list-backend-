@@ -7,9 +7,9 @@ export interface UpdateTaskRequest extends Request {
     is_completed?: boolean;
     title?: string;
     due_date?: Date;
-    assigned_to?: number;
-    project_id?: number;
-    members?: Array<number>;
+    assigned_to?: string;
+    project_id?: string;
+    members?: Array<string>;
   };
   params: {
     id: string;

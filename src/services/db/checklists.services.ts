@@ -7,8 +7,8 @@ import {
 } from '../../helpers/error';
 
 export const checkChecklist = async (
-  id: number | string,
-  userId?: number | string
+  id: string,
+  userId?: string
 ) => {
   const checklist = await Checklist.findByPk(id);
 
@@ -85,7 +85,7 @@ export const updateChecklist = async (
   id: string,
   payload: object,
   items: Array<{
-    id: number | null;
+    id: string | null;
     content: string;
     is_completed: boolean;
   }> | null

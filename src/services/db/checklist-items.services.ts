@@ -3,7 +3,7 @@ const { Checklistitem } = require('../../db/models/index');
 import { sequelize } from '../../db/models';
 import { EntityNotFoundError } from '../../helpers/error';
 
-export const getChecklistId = async (id: number | string) => {
+export const getChecklistId = async (id: string) => {
   const checklistitem = await Checklistitem.findByPk(id);
 
   if (!checklistitem) {
@@ -33,11 +33,11 @@ export const deleteChecklistItem = async (id: string) => {
   }
 };
 
-export const deleteChecklistItems = async (items: Array<number>) => {
+export const deleteChecklistItems = async (items: Array<string>) => {
   const transaction = await sequelize.transaction();
 
   await Promise.all(
-    items?.map(async (item: number) => {
+    items?.map(async item => {
       await Checklistitem.destroy({
         where: { id: item },
         transaction,

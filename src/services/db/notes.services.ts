@@ -7,8 +7,8 @@ import {
 } from '../../helpers/error';
 
 export const checkNote = async (
-  id: number | string,
-  userId?: number | string
+  id: string,
+  userId?: string
 ) => {
   const note = await Note.findByPk(id);
 

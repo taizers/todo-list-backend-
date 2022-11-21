@@ -5,7 +5,7 @@
   "main": "server.ts",
   "scripts": {
     "build": "rimraf ./build && tsc",
-    "start": "npm run build && node build/index.js",
+    "start": "npm run build && node build/server.js",
     "pretty": "prettier --config --write \"./{src,test}/**/*.{js,json,ts}\"",
     "lint": "eslint . --ext .ts",
     "dev": "nodemon",

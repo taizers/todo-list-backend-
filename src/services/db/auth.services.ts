@@ -16,7 +16,7 @@ import {
 import bcrypt from 'bcrypt';
 import { UnAuthorizedError, ApplicationError } from '../../helpers/error';
 
-const getUserSession = async (id: number) => {
+const getUserSession = async (id: string) => {
   const session = generateTokens(id);
 
   await saveToken(id, session.refresh_token);
@@ -50,6 +50,7 @@ export const createUser = async (payload: object) => {
   try {
     user = await User.create(payload);
   } catch (error) {
+    console.log(error);
     throw new Error('Could not create user');
   }
 

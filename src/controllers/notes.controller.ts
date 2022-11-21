@@ -28,7 +28,7 @@ export const createNoteAction = async (
     const note = await createNote({
       description,
       color,
-      owner_id: Number(id),
+      owner_id: id,
     });
 
     return customResponse(res, 200, note);

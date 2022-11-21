@@ -9,8 +9,8 @@ import { QueryTypes } from 'sequelize';
 import { sequelize } from '../../db/models';
 
 export const getAndCheckProject = async (
-  id: number | string,
-  userId?: number | string
+  id: string,
+  userId?: string
 ) => {
   const project = await Project.findByPk(id);
 
