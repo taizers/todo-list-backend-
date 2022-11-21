@@ -6,11 +6,8 @@ import {
   DontHaveAccessError,
 } from '../../helpers/error';
 
-export const checkNote = async (
-  id: string,
-  userId?: string
-) => {
-  const note = await Note.findByPk(id);
+export const checkNote = async (id: string, userId?: string) => {
+  const note = await Note.findOne({ id });
 
   if (!note) {
     throw new ResourceNotFoundError('Note');

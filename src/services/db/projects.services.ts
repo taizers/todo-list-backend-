@@ -8,11 +8,8 @@ import {
 import { QueryTypes } from 'sequelize';
 import { sequelize } from '../../db/models';
 
-export const getAndCheckProject = async (
-  id: string,
-  userId?: string
-) => {
-  const project = await Project.findByPk(id);
+export const getAndCheckProject = async (id: string, userId?: string) => {
+  const project = await Project.findOne({ id });
 
   if (!project) {
     throw new ResourceNotFoundError('Project');
@@ -77,16 +74,8 @@ export const getProjectsStatistic = async (id: string) => {
       (SELECT COUNT(tasks.id)
       FROM tasks 
       WHERE (tasks.deleted_at IS NULL AND (tasks.project_id = projects.id AND tasks.is_completed = false))) as tasks_number 
-    FROM projects, tasks, task_members 
-    WHERE (projects.deleted_at IS NULL 
-      AND (projects.owner_id = ${id} 
-        OR (tasks.deleted_at IS NULL 
-          AND (projects.id = tasks.project_id 
-            AND (tasks.owner_id = ${id} OR tasks.assigned_to = ${id}))) 
-        OR (task_members.deleted_at IS NULL AND tasks.deleted_at IS NULL
-          AND (projects.id = tasks.project_id 
-            AND task_members.task_id = tasks.id 
-            AND task_members.user_id = ${id})))) 
+    FROM projects, tasks
+    WHERE (projects.deleted_at IS NULL AND projects.owner_id = '${id}')
     GROUP BY projects.id 
     ORDER BY projects.id`,
     { type: QueryTypes.SELECT }

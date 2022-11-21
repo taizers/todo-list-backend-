@@ -15,11 +15,11 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
       },
       owner_id: {
-        type: DataTypes.UUIDV4,
+        type: DataTypes.UUID,
         allowNull: false,
       },
       assigned_to: {
-        type: DataTypes.UUIDV4,
+        type: DataTypes.UUID,
         allowNull: true,
         defaultValue: null,
       },

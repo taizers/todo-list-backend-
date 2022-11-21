@@ -4,7 +4,7 @@ import { sequelize } from '../../db/models';
 import { EntityNotFoundError } from '../../helpers/error';
 
 export const getChecklistId = async (id: string) => {
-  const checklistitem = await Checklistitem.findByPk(id);
+  const checklistitem = await Checklistitem.findOne({ id });
 
   if (!checklistitem) {
     throw new EntityNotFoundError(id.toString(), 'ChecklistItemModel');
@@ -37,7 +37,7 @@ export const deleteChecklistItems = async (items: Array<string>) => {
   const transaction = await sequelize.transaction();
 
   await Promise.all(
-    items?.map(async item => {
+    items?.map(async (item) => {
       await Checklistitem.destroy({
         where: { id: item },
         transaction,

@@ -6,11 +6,8 @@ import {
   DontHaveAccessError,
 } from '../../helpers/error';
 
-export const checkChecklist = async (
-  id: string,
-  userId?: string
-) => {
-  const checklist = await Checklist.findByPk(id);
+export const checkChecklist = async (id: string, userId?: string) => {
+  const checklist = await Checklist.findOne({ id });
 
   if (!checklist) {
     throw new ResourceNotFoundError('Checklist');

@@ -12,11 +12,8 @@ import {
 
 import CommentAttachmentDto from '../../dtos/comment-attachment.dto';
 
-export const checkComment = async (
-  id: string,
-  userId?: string
-) => {
-  const comment = await Comment.findByPk(id);
+export const checkComment = async (id: string, userId?: string) => {
+  const comment = await Comment.findOne({ id });
 
   if (!comment) {
     throw new ResourceNotFoundError('Comment');

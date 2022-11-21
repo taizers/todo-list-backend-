@@ -46,11 +46,8 @@ const convertUsersAndAttachmentsInTask = (task: TaskFromDBType) => {
   return resultTask;
 };
 
-export const checkTask = async (
-  id: string,
-  userId?: string
-) => {
-  const task = await Task.findByPk(id);
+export const checkTask = async (id: string, userId?: string) => {
+  const task = await Task.findOne({ id });
 
   if (!task) {
     throw new ResourceNotFoundError('Task');
@@ -145,32 +142,35 @@ export const findTasks = async (where: object) => {
 };
 
 export const findMemberTasks = async (id: string) => {
-  const user = await User.findByPk(id, {
-    attributes: [],
-    include: [
-      {
-        model: Task,
-        as: 'members',
-        through: {
-          attributes: [],
-        },
-        include: [
-          {
-            model: User,
-            as: 'members',
-            attributes: { exclude: ['password'] },
-            through: {
-              attributes: [],
+  const user = await User.findOne(
+    { id },
+    {
+      attributes: [],
+      include: [
+        {
+          model: Task,
+          as: 'members',
+          through: {
+            attributes: [],
+          },
+          include: [
+            {
+              model: User,
+              as: 'members',
+              attributes: { exclude: ['password'] },
+              through: {
+                attributes: [],
+              },
             },
-          },
-          {
-            model: Taskattachment,
-            as: 'attachments',
-          },
-        ],
-      },
-    ],
-  });
+            {
+              model: Taskattachment,
+              as: 'attachments',
+            },
+          ],
+        },
+      ],
+    }
+  );
 
   const resultTasks = user?.members?.map((task: TaskFromDBType) =>
     convertUsersAndAttachmentsInTask(task)

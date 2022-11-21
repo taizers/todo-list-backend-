@@ -52,7 +52,7 @@ const getQuickNotesValue = async (id: string) => {
 };
 
 export const checkUser = async (id: string) => {
-  const user = await User.findByPk(id);
+  const user = await User.findOne({ id });
 
   if (!user) {
     throw new ResourceNotFoundError('User');
