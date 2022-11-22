@@ -84,15 +84,15 @@ export const loginAction = async (
   logger.info(`Login Action: { email: ${email}, password: ${password} }`);
 
   try {
-    const user: any = await login(email, password);
+    const user_session: any = await login(email, password);
 
-    res.cookie('refresh_token', user.user_session.refresh_token, {
+    res.cookie('refresh_token', user_session.refresh_token, {
       maxAge: Number(process.env.JWT_REFRESH_MAX_AGE) * 1000,
       httpOnly: true,
       secure: process.env.NODE_ENV === 'development' ? false : true,
     });
 
-    return customResponse(res, 200, user);
+    return customResponse(res, 200, user_session);
   } catch (err) {
     logger.error('Login Action - Cannot find user', err);
     next(err);
@@ -109,15 +109,15 @@ export const refreshAction = async (
   logger.info(`Refresh Action: { refresh_token: ${refresh_token} }`);
 
   try {
-    const user: any = await refresh(refresh_token);
+    const user_session: any = await refresh(refresh_token);
 
-    res.cookie('refresh_token', user.user_session.refresh_token, {
+    res.cookie('refresh_token', user_session.refresh_token, {
       maxAge: Number(process.env.JWT_REFRESH_MAX_AGE) * 1000,
       httpOnly: true,
       secure: false,
     });
 
-    return customResponse(res, 200, user);
+    return customResponse(res, 200, user_session);
   } catch (err) {
     logger.error('Refresh Action - Cannot refresh', err);
     next(err);
