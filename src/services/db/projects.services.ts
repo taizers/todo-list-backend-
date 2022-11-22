@@ -74,7 +74,7 @@ export const getProjectsStatistic = async (id: string) => {
       (SELECT COUNT(tasks.id)
       FROM tasks 
       WHERE (tasks.deleted_at IS NULL AND (tasks.project_id = projects.id AND tasks.is_completed = false))) as tasks_number 
-    FROM projects, tasks, task_members 
+    FROM projects, tasks 
     WHERE (projects.deleted_at IS NULL 
       AND (projects.owner_id = '${id}'
         OR (tasks.deleted_at IS NULL 
