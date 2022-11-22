@@ -40,10 +40,9 @@ export const login = async (email: string, password: string) => {
     throw new BadCredentialsError('Bad password');
   }
 
-  const userDto = new UserDto(user);
   const user_session = await getUserSession(user.id);
 
-  return { user_session, ...userDto };
+  return user_session;
 };
 
 export const createUser = async (payload: object) => {
@@ -85,8 +84,7 @@ export const refresh = async (refreshToken: string) => {
     throw new UnAuthorizedError();
   }
 
-  const userDto = new UserDto(user);
   const user_session = await getUserSession(user.id);
 
-  return { user_session, ...userDto };
+  return user_session;
 };

@@ -12,7 +12,7 @@ export const generateTokens = (id: string) => {
   });
 
   return {
-    user_id: id,
+    id,
     access_token,
     refresh_token,
     token_type: 'Bearer',
