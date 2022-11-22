@@ -9,7 +9,7 @@ import { QueryTypes } from 'sequelize';
 import { sequelize } from '../../db/models';
 
 export const getAndCheckProject = async (id: string, userId?: string) => {
-  const project = await Project.findOne({ id });
+  const project = await Project.findOne({ where: { id } });
 
   if (!project) {
     throw new ResourceNotFoundError('Project');

@@ -7,7 +7,7 @@ import {
 } from '../../helpers/error';
 
 export const checkNote = async (id: string, userId?: string) => {
-  const note = await Note.findOne({ id });
+  const note = await Note.findOne({ where: { id } });
 
   if (!note) {
     throw new ResourceNotFoundError('Note');

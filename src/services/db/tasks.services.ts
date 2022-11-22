@@ -47,7 +47,7 @@ const convertUsersAndAttachmentsInTask = (task: TaskFromDBType) => {
 };
 
 export const checkTask = async (id: string, userId?: string) => {
-  const task = await Task.findOne({ id });
+  const task = await Task.findOne({ where: { id } });
 
   if (!task) {
     throw new ResourceNotFoundError('Task');
@@ -143,8 +143,8 @@ export const findTasks = async (where: object) => {
 
 export const findMemberTasks = async (id: string) => {
   const user = await User.findOne(
-    { id },
     {
+      where: { id },
       attributes: [],
       include: [
         {

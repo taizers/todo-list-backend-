@@ -7,7 +7,7 @@ import {
 } from '../../helpers/error';
 
 export const checkChecklist = async (id: string, userId?: string) => {
-  const checklist = await Checklist.findOne({ id });
+  const checklist = await Checklist.findOne({ where: { id } });
 
   if (!checklist) {
     throw new ResourceNotFoundError('Checklist');

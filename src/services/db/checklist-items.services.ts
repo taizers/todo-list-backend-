@@ -4,7 +4,7 @@ import { sequelize } from '../../db/models';
 import { EntityNotFoundError } from '../../helpers/error';
 
 export const getChecklistId = async (id: string) => {
-  const checklistitem = await Checklistitem.findOne({ id });
+  const checklistitem = await Checklistitem.findOne({ where: { id } });
 
   if (!checklistitem) {
     throw new EntityNotFoundError(id.toString(), 'ChecklistItemModel');
