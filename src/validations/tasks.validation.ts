@@ -27,7 +27,7 @@ export const updateTaskValidation = validate(
       description: Joi.string().max(1024),
       due_date: Joi.date(),
       is_completed: Joi.boolean(),
-      assigned_to: Joi.string().max(256),
+      assigned_to: Joi.string().max(256).allow(null),
       project_id: Joi.string().max(256),
       members: Joi.array().items(Joi.string().max(256)).allow(null),
     }),

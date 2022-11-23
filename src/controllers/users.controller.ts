@@ -26,7 +26,7 @@ export const getUserAction = async (
 
     return customResponse(res, 200, users);
   } catch (err) {
-    logger.error('Get User Action - Cannot get users', err);
+    logger.error('Get User Action - Cannot get user', err);
     next(err);
   }
 };
