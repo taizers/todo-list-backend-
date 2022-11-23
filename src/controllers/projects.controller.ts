@@ -10,7 +10,6 @@ import {
 } from '../services/db/projects.services';
 import { customResponse } from '../helpers/responce';
 import logger from '../helpers/logger';
-import { SearchProjectRequest } from '../types/requests/projects.request.type';
 import { ParamsIdRequest } from '../types/requests/global.request.type';
 import { Op } from 'sequelize';
 import { checkUser } from '../services/db/users.services';
@@ -160,18 +159,19 @@ export const updateProjectAction = async (
 };
 
 export const searchProjectAction = async (
-  req: SearchProjectRequest,
+  req: any,
   res: Response,
   next: NextFunction
 ) => {
   const { query } = req.query;
+  const { id } = req.user;
 
   logger.info(`Search Project Action: { query: ${query} } `);
 
   let project;
 
   try {
-    project = await findProjects({ title: { [Op.substring]: query } });
+    project = await findProjects({ title: { [Op.substring]: query }, owner_id:  id});
 
     return customResponse(res, 200, project);
   } catch (err) {
