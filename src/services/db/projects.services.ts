@@ -70,7 +70,7 @@ export const findProjects = async (where: object) => {
 export const getProjectsStatistic = async (id: string) => {
   const projects = await sequelize.query(
     `
-    SELECT projects.*, 
+    SELECT projects.id, 
       (SELECT COUNT(tasks.id)
       FROM tasks 
       WHERE (tasks.deleted_at IS NULL AND (tasks.project_id = projects.id AND tasks.is_completed = false))) as tasks_number 
