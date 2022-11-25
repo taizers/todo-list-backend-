@@ -86,7 +86,9 @@ export const getProjectsStatistic = async (id: string) => {
     { type: QueryTypes.SELECT }
   );
 
-  return projects;
+  const statistic = projects.map((item: any) => ({...item, tasks_number: Number(item.tasks_number)}))
+
+  return statistic;
 };
 
 export const updateProject = async (id: string, payload: object) => {
