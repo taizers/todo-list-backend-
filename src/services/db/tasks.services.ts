@@ -1,5 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Task, Taskattachment, User } = require('../../db/models/index');
+import moment from 'moment';
+
 import {
   ResourceNotFoundError,
   EntityNotFoundError,
@@ -39,6 +41,8 @@ const convertUsersAndAttachmentsInTask = (task: TaskFromDBType) => {
 
   const resultTask = {
     ...task.dataValues,
+    created_at: moment(task.dataValues.created_at).format('YYYY-MM-DD[T]HH:mm:SSS'),
+    due_date: moment(task.dataValues.due_date).format('YYYY-MM-DD[T]HH:mm:SSS'),
     members: dtosUsers || null,
     attachments: dtosAttachments || null,
   };
@@ -76,7 +80,6 @@ export const findTask = async (where: object) => {
       },
     ],
   });
-
   if (!task) {
     throw new ResourceNotFoundError('Task');
   }

@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export default (sequelize, DataTypes) => {
   const Taskattachment = sequelize.define(
     'taskattachment',
@@ -9,6 +11,13 @@ export default (sequelize, DataTypes) => {
       type: {
         type: DataTypes.STRING(10),
         allowNull: false,
+      },
+      created_at: {
+        type: DataTypes.DATE,    
+        allowNull: false,            
+        get() {
+            return moment(this.getDataValue('created_at')).format('YYYY-MM-DD[T]HH:mm:SSS');
+        }
       },
     }
   );

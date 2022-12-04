@@ -39,7 +39,7 @@ export type TaskType = {
 export type TaskFromDBType = {
   members: Array<UserType>;
   attachments: Array<TaskAttachmentType>;
-  dataValues: object;
+  dataValues: any;
 };
 
 export type CommentType = {

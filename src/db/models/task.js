@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export default (sequelize, DataTypes) => {
   const Task = sequelize.define(
     'task',
@@ -13,6 +15,9 @@ export default (sequelize, DataTypes) => {
       due_date: {
         type: DataTypes.DATE,
         allowNull: false,
+        get() {
+          return moment(this.getDataValue('due_date')).format('YYYY-MM-DD[T]HH:mm:SSS');
+        },
       },
       owner_id: {
         type: DataTypes.UUID,
@@ -27,6 +32,13 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false,
+      },
+      created_at: {
+        type: DataTypes.DATE, 
+        allowNull: false,               
+        get() {
+            return moment(this.getDataValue('created_at')).format('YYYY-MM-DD[T]HH:mm:SSS');
+        }
       },
     }
   );
