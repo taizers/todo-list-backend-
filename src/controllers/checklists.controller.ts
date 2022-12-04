@@ -11,6 +11,7 @@ import { customResponse } from '../helpers/responce';
 import { ParamsIdRequest } from '../types/requests/global.request.type';
 import logger from '../helpers/logger';
 import { checkUser } from '../services/db/users.services';
+import { deleteItemsFromChecklist } from '../services/db/checklist-items.services';
 
 export const createChecklistAction = async (
   req: any,
@@ -63,6 +64,7 @@ export const deleteChecklistAction = async (
 
   try {
     await checkChecklist(id, userId);
+    await deleteItemsFromChecklist(id);
     await deleteChecklist(id);
 
     return customResponse(res, 200, { id });

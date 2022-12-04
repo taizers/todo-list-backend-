@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Checklistitem } = require('../../db/models/index');
 import { sequelize } from '../../db/models';
-import { EntityNotFoundError } from '../../helpers/error';
+import { EntityNotFoundError, ApplicationError } from '../../helpers/error';
 
 export const getChecklistId = async (id: string) => {
   const checklistitem = await Checklistitem.findOne({ where: { id } });
@@ -30,6 +30,14 @@ export const deleteChecklistItem = async (id: string) => {
 
   if (result === 0) {
     throw new EntityNotFoundError(id, 'ChecklistItemModel');
+  }
+};
+
+export const deleteItemsFromChecklist = async (id: string) => {
+  const result = await Checklistitem.destroy({ where: { checklist_id: id } });
+
+  if (result === 0) {
+    throw new ApplicationError('Cannot delete CheckList items', 409);
   }
 };
 
