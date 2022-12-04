@@ -22,6 +22,6 @@ export default class TaskAttachmentDto {
       `${process.env.BACKEND_URL}${taskAttachmentsPath}/${model.name}` : '';
     this.name = model.name;
     this.type = model.type;
-    this.created_at = moment(model.created_at).format('YYYY-MM-DD[T]HH:mm:ss.SSS');
+    this.created_at = model.created_at;
   }
 }

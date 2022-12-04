@@ -23,6 +23,13 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      created_at: {
+        type: DataTypes.DATE,    
+        allowNull: false,            
+        get() {
+            return moment(this.getDataValue('created_at')).format('YYYY-MM-DD[T]HH:mm:ss.SSS');
+        }
+      },
     }
   );
 
