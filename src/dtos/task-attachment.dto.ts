@@ -20,6 +20,6 @@ export default class TaskAttachmentDto {
       `${process.env.BACKEND_URL}${taskAttachmentsPath}/${model.name}` : '';
     this.name = model.name;
     this.type = model.type;
-    this.created_at = model.created_at;
+    this.created_at = model.created_at.toString().slice(0, -1);
   }
 }
