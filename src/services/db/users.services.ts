@@ -96,8 +96,8 @@ export const getUserStatistic = async (id: string) => {
   const quickNotes = await getQuickNotesValue(id);
 
   const statistic = {
-    created_task: countCreatedTask,
-    completed_task: countCompletedTask,
+    created_tasks: countCreatedTask,
+    completed_tasks: countCompletedTask,
     events: `${events || 0}%`,
     quick_notes: `${quickNotes || 0}%`,
     todo: `${todo || 0}%`,
