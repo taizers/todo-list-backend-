@@ -42,8 +42,8 @@ const convertUsersAndAttachmentsInTask = (task: TaskFromDBType) => {
   const resultTask = {
     ...task.dataValues,
     due_date: moment(task.dataValues.due_date).format('YYYY-MM-DD[T]HH:mm'),
-    members: dtosUsers || null,
-    attachments: dtosAttachments || null,
+    members: dtosUsers.length ? dtosUsers : null,
+    attachments: dtosAttachments.length ? dtosAttachments : null,
   };
 
   return resultTask;
