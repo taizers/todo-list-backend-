@@ -8,6 +8,7 @@ export default class CommentAttachmentDto {
   id;
   type;
   url;
+  name;
   comment_id;
   created_at;
 
@@ -17,6 +18,7 @@ export default class CommentAttachmentDto {
     this.url =
       model.name ?
       `${process.env.BACKEND_URL}${commentAttachmentsPath}/${model.name}` : '';
+    this.name = model.name;
     this.type = model.type;
     this.created_at = model.created_at;
   }
