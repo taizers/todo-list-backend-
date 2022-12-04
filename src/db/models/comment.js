@@ -6,9 +6,6 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
-    },
-    {
-      paranoid: true,
     }
   );
 

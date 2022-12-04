@@ -10,9 +10,6 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING(10),
         allowNull: false,
       },
-    },
-    {
-      paranoid: true,
     }
   );
 

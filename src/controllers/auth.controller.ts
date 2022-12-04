@@ -14,7 +14,6 @@ import {
   loginRequest,
   requestWithCookiesToken,
 } from '../types/requests/auth.request.type';
-import { UserSessionType } from '../types/entities/global.entities.type';
 import logger from '../helpers/logger';
 
 const PersonalProject = {

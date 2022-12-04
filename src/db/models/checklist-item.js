@@ -11,9 +11,6 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: false,
       },
-    },
-    {
-      paranoid: true,
     }
   );
 

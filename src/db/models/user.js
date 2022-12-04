@@ -21,9 +21,6 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-    },
-    {
-      paranoid: true,
     }
   );
 

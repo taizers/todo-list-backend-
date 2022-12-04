@@ -4,8 +4,6 @@ export type CommentAttachmentType = {
   comment_id: string;
   name: string;
   created_at: Date;
-  updated_at: Date;
-  deleted_at: Date | null;
 };
 
 export type TaskAttachmentType = {
@@ -14,8 +12,6 @@ export type TaskAttachmentType = {
   task_id: string;
   name: string;
   created_at: Date;
-  updated_at: Date;
-  deleted_at: Date | null;
 };
 
 export type UserType = {
@@ -24,8 +20,6 @@ export type UserType = {
   username: string;
   avatar: string | null;
   created_at: Date;
-  updated_at: Date;
-  deleted_at: Date | null;
 };
 
 export type TaskType = {
@@ -40,8 +34,6 @@ export type TaskType = {
   members: Array<UserType>;
   attachments: Array<TaskAttachmentType>;
   created_at: Date;
-  updated_at: Date;
-  deleted_at: Date | null;
 };
 
 export type TaskFromDBType = {
@@ -57,8 +49,6 @@ export type CommentType = {
   task_id: string;
   attachments: Array<CommentAttachmentType>;
   created_at: Date;
-  updated_at: Date;
-  deleted_at: Date | null;
 };
 
 export type CommentFromDBType = {
