@@ -54,7 +54,6 @@ export default (sequelize, DataTypes) => {
       foreignKey: 'task_id',
     });
     Task.belongsToMany(models.User, {
-      onDelete: 'cascade',
       through: 'task_members',
       as: 'members',
     });
