@@ -1,6 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { Task, Taskattachment, User } = require('../../db/models/index');
+const { Task, Taskattachment, User, Comment } = require('../../db/models/index');
 import moment from 'moment';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const fs = require('fs').promises;
+import path from 'path';
 
 import {
   ResourceNotFoundError,
@@ -16,6 +20,8 @@ import {
   TaskFromDBType,
 } from '../../types/entities/global.entities.type';
 import { sequelize } from '../../db/models';
+import { taskAttachmentsPath } from '../../constants';
+import { deleteComment } from './comments.services';
 
 const convertTaskAttachment = (attachments: Array<TaskAttachmentType>) => {
   const dtosAttachments = attachments?.map((attachment: TaskAttachmentType) => {
@@ -42,7 +48,9 @@ const convertUsersAndAttachmentsInTask = (task: TaskFromDBType) => {
   const resultTask = {
     ...task.dataValues,
     due_date: moment(task.dataValues.due_date).format('YYYY-MM-DD[T]HH:mm'),
-    created_at: moment(task.dataValues.created_at).format('YYYY-MM-DD[T]HH:mm:ss.SSS'),
+    created_at: moment(task.dataValues.created_at).format(
+      'YYYY-MM-DD[T]HH:mm:ss.SSS'
+    ),
     members: dtosUsers.length ? dtosUsers : null,
     attachments: dtosAttachments.length ? dtosAttachments : null,
   };
@@ -111,6 +119,28 @@ export const createTask = async (
 };
 
 export const deleteTask = async (id: string) => {
+  const attachments = await Taskattachment.findAll({ where: { task_id: id } });
+
+  await Promise.all(
+    attachments.map(async (item: { id: string; name: string }) => {
+      await fs.unlink(path.join('files', taskAttachmentsPath, item.name));
+
+      const result = await Taskattachment.destroy({ where: { id: item.id } });
+
+      if (result === 0) {
+        throw new EntityNotFoundError(item.id, 'Task Attachment Model');
+      }
+    })
+  );
+
+  const comments = await Comment.findAll({ where: { task_id: id } });
+
+  await Promise.all(
+    comments.map(async (item: { id: string }) => {
+      await deleteComment(item.id);
+    })
+  );
+
   const result = await Task.destroy({ where: { id } });
 
   if (result === 0) {

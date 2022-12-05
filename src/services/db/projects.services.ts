@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { Project } = require('../../db/models/index');
+const { Project, Task } = require('../../db/models/index');
 import {
   ResourceNotFoundError,
   EntityNotFoundError,
@@ -7,6 +7,7 @@ import {
 } from '../../helpers/error';
 import { QueryTypes } from 'sequelize';
 import { sequelize } from '../../db/models';
+import { deleteTask } from './tasks.services';
 
 export const getAndCheckProject = async (id: string, userId?: string) => {
   const project = await Project.findOne({ where: { id } });
@@ -48,6 +49,14 @@ export const createProject = async (payload: object) => {
 };
 
 export const deleteProject = async (id: string) => {
+  const tasks = await Task.findAll({ where: { project_id: id } });
+
+  await Promise.all(
+    tasks.map(async (item: { id: string }) => {
+      await deleteTask(item.id);
+    })
+  );
+
   const result = await Project.destroy({ where: { id } });
 
   if (result === 0) {

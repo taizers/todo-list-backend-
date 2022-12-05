@@ -1,6 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Comment, Commentattachment } = require('../../db/models/index');
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const fs = require('fs').promises;
+import path from 'path';
+
 import moment from 'moment';
 
 import {
@@ -14,6 +18,7 @@ import {
 } from '../../types/entities/global.entities.type';
 
 import CommentAttachmentDto from '../../dtos/comment-attachment.dto';
+import { commentAttachmentsPath } from '../../constants';
 
 export const checkComment = async (id: string, userId?: string) => {
   const comment = await Comment.findOne({ where: { id } });
@@ -34,7 +39,9 @@ const convertAttchmentsInComment = (comment: CommentFromDBType) => {
 
   return {
     ...comment.dataValues,
-    created_at: moment(comment.dataValues.created_at).format('YYYY-MM-DD[T]HH:mm:ss.SSS'),
+    created_at: moment(comment.dataValues.created_at).format(
+      'YYYY-MM-DD[T]HH:mm:ss.SSS'
+    ),
     attachments: dtosAttachments.length ? dtosAttachments : null,
   };
 };
@@ -52,6 +59,24 @@ export const createComment = async (payload: object) => {
 };
 
 export const deleteComment = async (id: string) => {
+  const attachments = await Commentattachment.findAll({
+    where: { comment_id: id },
+  });
+
+  await Promise.all(
+    attachments.map(async (item: { id: string; name: string }) => {
+      await fs.unlink(path.join('files', commentAttachmentsPath, item.name));
+
+      const result = await Commentattachment.destroy({
+        where: { id: item.id },
+      });
+
+      if (result === 0) {
+        throw new EntityNotFoundError(item.id, 'Comment Attachment Model');
+      }
+    })
+  );
+
   const result = await Comment.destroy({ where: { id } });
 
   if (result === 0) {
