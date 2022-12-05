@@ -171,7 +171,10 @@ export const searchProjectAction = async (
   let project;
 
   try {
-    project = await findProjects({ title: { [Op.substring]: query }, owner_id:  id});
+    project = await findProjects({
+      title: { [Op.substring]: query },
+      owner_id: id,
+    });
 
     return customResponse(res, 200, project);
   } catch (err) {

@@ -29,7 +29,10 @@ const convertAttchmentsInComment = (comment: CommentFromDBType) => {
     (attachment: CommentAttachmentType) => new CommentAttachmentDto(attachment)
   );
 
-  return { ...comment.dataValues, attachments: dtosAttachments.length ? dtosAttachments : null };
+  return {
+    ...comment.dataValues,
+    attachments: dtosAttachments.length ? dtosAttachments : null,
+  };
 };
 
 export const createComment = async (payload: object) => {

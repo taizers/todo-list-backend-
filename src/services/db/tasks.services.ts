@@ -144,35 +144,33 @@ export const findTasks = async (where: object) => {
 };
 
 export const findMemberTasks = async (id: string) => {
-  const user = await User.findOne(
-    {
-      where: { id },
-      attributes: [],
-      include: [
-        {
-          model: Task,
-          as: 'members',
-          through: {
-            attributes: [],
-          },
-          include: [
-            {
-              model: User,
-              as: 'members',
-              attributes: { exclude: ['password'] },
-              through: {
-                attributes: [],
-              },
-            },
-            {
-              model: Taskattachment,
-              as: 'attachments',
-            },
-          ],
+  const user = await User.findOne({
+    where: { id },
+    attributes: [],
+    include: [
+      {
+        model: Task,
+        as: 'members',
+        through: {
+          attributes: [],
         },
-      ],
-    }
-  );
+        include: [
+          {
+            model: User,
+            as: 'members',
+            attributes: { exclude: ['password'] },
+            through: {
+              attributes: [],
+            },
+          },
+          {
+            model: Taskattachment,
+            as: 'attachments',
+          },
+        ],
+      },
+    ],
+  });
 
   const resultTasks = user?.members?.map((task: TaskFromDBType) =>
     convertUsersAndAttachmentsInTask(task)

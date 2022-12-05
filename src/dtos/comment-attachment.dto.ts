@@ -17,9 +17,9 @@ export default class CommentAttachmentDto {
   constructor(model: CommentAttachmentType) {
     this.id = model.id;
     this.comment_id = model.comment_id;
-    this.url =
-      model.name ?
-      `${process.env.BACKEND_URL}${commentAttachmentsPath}/${model.name}` : '';
+    this.url = model.name
+      ? `${process.env.BACKEND_URL}${commentAttachmentsPath}/${model.name}`
+      : '';
     this.name = model.name;
     this.type = model.type;
     this.created_at = model.created_at;

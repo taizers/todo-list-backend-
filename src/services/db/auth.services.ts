@@ -78,7 +78,7 @@ export const refresh = async (refreshToken: string) => {
   ) {
     throw new ApplicationError('Invalid refresh token.', 401);
   }
-  const user = await User.findOne({where: { id: userFormToken.id }});
+  const user = await User.findOne({ where: { id: userFormToken.id } });
 
   if (!user) {
     throw new UnAuthorizedError();

@@ -14,8 +14,9 @@ export default class UserDto {
   constructor(model: UserType) {
     this.id = model.id;
     this.email = model.email;
-    this.avatar_url =
-      model.avatar ? `${process.env.BACKEND_URL}${photosPath}/${model.avatar}` : '';
+    this.avatar_url = model.avatar
+      ? `${process.env.BACKEND_URL}${photosPath}/${model.avatar}`
+      : '';
     this.username = model.username;
     this.created_at = model.created_at;
   }

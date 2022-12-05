@@ -83,7 +83,10 @@ export const getProjectsStatistic = async (id: string) => {
     { type: QueryTypes.SELECT }
   );
 
-  const statistic = projects.map((item: any) => ({project_id: id, tasks_number: Number(item.tasks_number)}))
+  const statistic = projects.map((item: any) => ({
+    project_id: id,
+    tasks_number: Number(item.tasks_number),
+  }));
 
   return statistic;
 };
