@@ -53,7 +53,7 @@ export type CommentType = {
 
 export type CommentFromDBType = {
   attachments: Array<CommentAttachmentType>;
-  dataValues: object;
+  dataValues: any;
 };
 
 export type UserSessionType = {

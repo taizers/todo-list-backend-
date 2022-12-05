@@ -1,5 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Comment, Commentattachment } = require('../../db/models/index');
+
+import moment from 'moment';
+
 import {
   EntityNotFoundError,
   ResourceNotFoundError,
@@ -31,6 +34,7 @@ const convertAttchmentsInComment = (comment: CommentFromDBType) => {
 
   return {
     ...comment.dataValues,
+    created_at: moment(comment.dataValues.created_at).format('YYYY-MM-DD[T]HH:mm:ss.SSS'),
     attachments: dtosAttachments.length ? dtosAttachments : null,
   };
 };
