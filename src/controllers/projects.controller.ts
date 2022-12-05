@@ -45,7 +45,7 @@ export const deleteProjectAction = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params;
+  const { id } = req.query;
   const { id: userId } = req.user;
 
   logger.info(`Delete Project Action: { id: ${id} } `);
