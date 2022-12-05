@@ -67,7 +67,7 @@ export const deleteProject = async (id: string) => {
 export const findProjects = async (where: object) => {
   const projects = await Project.findAll({
     where,
-    order: [['id','ASK']],
+    order: [['id','ASC']],
   });
 
   if (!projects.length) {
