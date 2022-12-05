@@ -141,6 +141,14 @@ export const deleteTask = async (id: string) => {
     })
   );
 
+  const task = await Task.findOne({
+    where: { id },
+    row: true,
+  });
+
+  const taskMembers = await task?.getMembers();
+  taskMembers && await task?.removeMembers(taskMembers);
+
   const result = await Task.destroy({ where: { id } });
 
   if (result === 0) {
