@@ -93,7 +93,7 @@ export const getProjectsStatistic = async (id: string) => {
   );
 
   const statistic = projects.map((item: any) => ({
-    project_id: id,
+    project_id: item.id,
     tasks_number: Number(item.tasks_number),
   }));
 
