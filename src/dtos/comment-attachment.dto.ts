@@ -1,8 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import moment from 'moment';
-
 import { commentAttachmentsPath } from '../constants';
 import { CommentAttachmentType } from '../types/entities/global.entities.type';
 

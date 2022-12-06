@@ -1,8 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import moment from 'moment';
-
 import { taskAttachmentsPath } from '../constants';
 import { TaskAttachmentType } from '../types/entities/global.entities.type';
 
